@@ -39,15 +39,16 @@ public class LoanCalc {
 	*/
 	// Side effect: modifies the class variable iterationCounter.
     public static double bruteForceSolver(double loan, double rate, int n, double epsilon) {  
-    	double payment = 0;
-		double balance;
-		int iterationCounter = 0;
-		do {
-			balance = endBalance(loan, rate, n, payment);
-			payment += epsilon; 
-			iterationCounter++; 
-		} while (Math.abs(balance) > epsilon);
-	    return payment;
+    	// Replace the following statement with your code
+		iterationCounter = 0;
+		double g = loan /n; //g = payment
+		double bruteGuess = endBalance(loan, rate, n, g);
+		while (bruteGuess > 0) {
+			g += epsilon;
+			bruteGuess = endBalance(loan, rate, n, g);
+			iterationCounter++;
+		}
+    	return g;
     }
     
     /**
@@ -58,24 +59,24 @@ public class LoanCalc {
 	*/
 	// Side effect: modifies the class variable iterationCounter.
     public static double bisectionSolver(double loan, double rate, int n, double epsilon) {  
-    	double low = 0; // Initial lower bound for bisection
-		double high = loan * (1 + rate / 12); // Initial upper bound for bisection
-		double guess = (low + high) / 2; // Initial guess
-
-		int iterationCounter = 0;
-
-		while (Math.abs(endBalance(loan, rate, n, guess)) > epsilon) {
-			if (endBalance(loan, rate, n, guess) < 0) {
-				high = guess;
-			} else {
-				low = guess;
+    	// Replace the following statement with your code
+		iterationCounter = 0;
+		double H = loan;
+		double L = 0.0;
+		double g = (L+H/2);
+		while ((H-L) > epsilon){
+			if (endBalance(loan, rate, n, g) * endBalance(loan, rate, n, L) > 0.0){
+				L = g;
 			}
+			else {
+				H = g;
+			}
+			g = (L+H)/2;
+			iterationCounter++;
 
-			guess = (low + high) / 2;
 
-			iterationCounter++; 
 		}
-	    return guess;
+    	return g;
     }
 	
 	/**
@@ -83,9 +84,14 @@ public class LoanCalc {
 	* interest rate (as a percentage), the number of periods (n), and the periodical payment.
 	*/
 	private static double endBalance(double loan, double rate, int n, double payment) {
-	    double monthlyRate = rate / 100 / 12;
-		double temp = Math.pow(1 + monthlyRate, n);
-		double endingBalance = loan * (temp - (Math.pow(1 + monthlyRate, n) - 1) / monthlyRate) / temp + payment * ((temp - 1) / monthlyRate);
-		return endingBalance;
+		// Replace the following statement with your code
+		
+		double newLoan = loan;
+		for (int i = 0; i < n; i++){
+			newLoan = (newLoan - payment) * (1.0 + rate/100 );
+		}    
+
+
+		return newLoan;
 	}
 }

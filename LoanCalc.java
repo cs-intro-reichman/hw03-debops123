@@ -48,7 +48,6 @@ public class LoanCalc {
 			iterationCounter++; 
 		} while (Math.abs(balance) > epsilon);
 	    return payment;
-    	return 0;
     }
     
     /**
